@@ -16,9 +16,31 @@ if ! test -f "../../../hl2/hl2_textures_dir.vpk"; then
 	echo Error: unable to find hl2 vpk\'s. Make sure you\'re not using symbolic links that prevent access to the hl2 folder, and that CleanTF2plus is inside the custom folder.
 	exit 1
 fi
-if ! test -f "../../../bin/vpk_linux32"; then
-	echo Error: unable to find bin/vpk_linux32. Make sure you\'re not using symbolic links that prevent access to the bin folder, and that CleanTF2plus is inside the custom folder.
-	exit 1
+if ! wine --version > /dev/null; then
+        echo Error: unable to find wine. Make sure you installed it with your system\'s package manager.
+        exit 1
+fi
+if ! convert --version > /dev/null; then
+        echo Error: unable to find imagemagick. Make sure you installed it with your system\'s package manager.
+        exit 1
+fi
+if ! python3 --version > /dev/null; then
+        echo Error: unable to find python3. Make sure you installed it with your system\'s package manager.
+        exit 1
+fi
+
+
+# SETUP
+
+# create python venv and install vpk
+echo Setting up python dependencies
+python3 -m venv ./venv
+source ./venv/bin/activate
+pip install vpk
+
+if ! vpk --version > /dev/null; then
+        echo Error: unable to install vpk. Correct any python errors or submit an issue.
+        exit 1
 fi
 
 
@@ -249,13 +271,13 @@ elif [ $flat == 2 ]; then
 fi
 if [ $nohats == 1 ]; then
 	echo removing hats
-	dev/generators/models_null.sh dev/lists/linux/nohats.txt "dev/linux/vpk.sh" "../../tf2_misc_dir.vpk"
+	dev/generators/models_null.sh dev/lists/linux/nohats.txt "vpk" "../../tf2_misc_dir.vpk"
 	dev/generators/remove.sh dev/lists/linux/nohats_weapons.txt
 	echo nohats >> dev/current_options.txt
 	echo done
 elif [ $nohats == 2 ]; then
         echo removing hats headsfeet
-        dev/generators/models_null.sh dev/lists/linux/nohats.txt "dev/linux/vpk.sh" "../../tf2_misc_dir.vpk"
+        dev/generators/models_null.sh dev/lists/linux/nohats.txt "vpk" "../../tf2_misc_dir.vpk"
 	dev/generators/remove.sh dev/lists/linux/nohats_headsfeet.txt
         dev/generators/remove.sh dev/lists/linux/nohats_weapons.txt
         echo nohats headsfeet >> dev/current_options.txt
@@ -263,19 +285,19 @@ elif [ $nohats == 2 ]; then
 fi
 if [ $playergibs == 1 ]; then
 	echo removing player gibs
-	dev/generators/models_null.sh dev/lists/linux/model_removal_gibs_player.txt "dev/linux/vpk.sh" "../../tf2_misc_dir.vpk"
+	dev/generators/models_null.sh dev/lists/linux/model_removal_gibs_player.txt "vpk" "../../tf2_misc_dir.vpk"
 	echo no player gibs >> dev/current_options.txt
 	echo done
 fi
 if [ $shells == 1 ]; then
 	echo removing shell models
-	dev/generators/models_null.sh dev/lists/linux/model_removal_shells.txt "dev/linux/vpk.sh" "../../tf2_misc_dir.vpk"
+	dev/generators/models_null.sh dev/lists/linux/model_removal_shells.txt "vpk" "../../tf2_misc_dir.vpk"
 	echo no shells >> dev/current_options.txt
 	echo done
 fi
 if [ $weapongibs == 1 ]; then
 	echo removing weapon gibs
-	dev/generators/models_null.sh dev/lists/linux/model_removal_gibs_weapons.txt "dev/linux/vpk.sh" "../../tf2_misc_dir.vpk"
+	dev/generators/models_null.sh dev/lists/linux/model_removal_gibs_weapons.txt "vpk" "../../tf2_misc_dir.vpk"
 	echo no weapon gibs >> dev/current_options.txt
 	echo done
 fi
