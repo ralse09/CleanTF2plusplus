@@ -8,6 +8,7 @@ IF NOT EXIST "..\..\tf2_textures_dir.vpk" (goto :ERR_MISSING_TEX_DIR)
 IF NOT EXIST "..\..\..\hl2\hl2_textures_dir.vpk" (goto :ERR_MISSING_HL2_DIR)
 IF NOT EXIST "..\..\..\bin\vpk.exe" (goto :ERR_MISSING_VPK_EXE)
 
+
 :: skip past all the error messages if they do exist
 goto :NO_ERRORS
 
@@ -48,6 +49,10 @@ set "overlay=0"
 set "fullbright=0"
 
 :: QUESTIONS
+
+IF EXIST "..\mastercomfig-addon-no-footsteps.vpk" (set "surfaceproperties=-1")
+IF EXIST "..\mastercomfig-addon-no-pyroland.vpk" (set "mtp=-1")
+IF EXIST "..\mastercomfig-addon-no-soundscapes.vpk"(set "soundscapes=-1")
 
 :FLAT
 set /P c=would you like flat materials? Y/N/Help     
@@ -127,6 +132,7 @@ set "weapongibs=1"
 goto :SURFACEPROPERTIES
 
 :SURFACEPROPERTIES
+if %surfaceproperties% == -1 goto :SOUNDSCAPES
 set /P c=would you like to add surfaceproperties? Y/N/Help     
 if /I "%c%" EQU "Y" goto :SURFACEPROPERTIES_GEN_NOSTEPS
 if /I "%c%" EQU "N" goto :SOUNDSCAPES
@@ -138,6 +144,7 @@ set "surfaceproperties=2"
 goto :SOUNDSCAPES
 
 :SOUNDSCAPES
+if %soundscapes% == -1 goto :MTP
 set /P c=would you like to remove soundscapes? Y/N/Help     
 if /I "%c%" EQU "Y" goto :SOUNDSCAPES_GEN
 if /I "%c%" EQU "N" goto :MTP
@@ -149,6 +156,7 @@ set "soundscapes=1"
 goto :MTP
 
 :MTP
+if %mtp% == -1 goto :END
 set /P c=would you like to add mtp.cfg? Y/N/Help     
 if /I "%c%" EQU "Y" goto :MTP_GEN
 if /I "%c%" EQU "N" goto :END
