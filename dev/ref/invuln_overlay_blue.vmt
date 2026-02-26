@@ -1,0 +1,6 @@
+"Modulate"
+{
+	"$basetexture" "vgui/replay/thumbnails/uberoverlay/invuln_overlay"
+	"$mod2x" "1"
+	"$color2" "{153 179 255}"
+}
